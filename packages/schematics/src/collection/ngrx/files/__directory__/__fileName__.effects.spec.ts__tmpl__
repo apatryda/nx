@@ -1,14 +1,14 @@
-import {TestBed, async} from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing';
 
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { EffectsModule } from '@ngrx/effects';
-import {StoreModule} from '@ngrx/store';
-import {provideMockActions} from '@ngrx/effects/testing';
+import { StoreModule } from '@ngrx/store';
+import { provideMockActions } from '@ngrx/effects/testing';
 
 import { NxModule } from '@nrwl/nx';
-import {DataPersistence} from '@nrwl/nx';
-import {hot} from '@nrwl/nx/testing';
+import { DataPersistence } from '@nrwl/nx';
+import { cold, hot } from '@nrwl/nx/testing';
 
 import { <%= className %>Effects } from './<%= fileName %>.effects';
 import { Load<%= className %>, <%= className %>Loaded } from './<%= fileName %>.actions';
@@ -22,12 +22,12 @@ describe('<%= className %>Effects', () => {
       imports: [
         NxModule.forRoot(),
         StoreModule.forRoot({}),
-        EffectsModule.forRoot([])
+        EffectsModule.forRoot([]),
       ],
       providers: [
         <%= className %>Effects,
         DataPersistence,
-        provideMockActions(() => actions)
+        provideMockActions(() => actions),
       ],
     });
 
@@ -35,11 +35,19 @@ describe('<%= className %>Effects', () => {
   });
 
   describe('load<%= className %>$', () => {
-    it('should work', () => {
-      actions = hot('-a-|', {a: new Load<%= className %>()});
-      expect(effects.load<%= className %>$).toBeObservable(
-        hot('-a-|', {a: new <%= className %>Loaded([])})
-      );
+    it('should result in a <%= className %>Loaded action', () => {
+      const values = {
+        a: new Load<%= className %>(),
+        z: new <%= className %>Loaded([]),
+      };
+      const source = hot('  -^a-|', values);
+      const subs = '         ^--!';
+      const expected = cold('-z-|', values);
+
+      const destination = effects.load<%= className %>$;
+
+      expect(destination).toBeObservable(expected);
+      expect(source).toHaveSubscriptions(subs);
     });
   });
 });

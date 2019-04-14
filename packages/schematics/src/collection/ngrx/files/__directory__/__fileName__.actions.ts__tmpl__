@@ -2,23 +2,24 @@ import {Action} from '@ngrx/store';
 import {Entity} from './<%= fileName %>.reducer';
 
 export enum <%= className %>ActionTypes {
- Load<%= className %> = "[<%= className %>] Load <%= className %>",
- <%= className %>Loaded = "[<%= className %>] <%= className %> Loaded",
- <%= className %>LoadError = "[<%= className %>] <%= className %> Load Error"
+  Load<%= className %> = "[<%= className %>] Load <%= className %>",
+  <%= className %>Loaded = "[<%= className %>] <%= className %> Loaded",
+  <%= className %>LoadError = "[<%= className %>] <%= className %> Load Error"
 }
 
 export class Load<%= className %> implements Action {
- readonly type = <%= className %>ActionTypes.Load<%= className %>;
+  readonly type = <%= className %>ActionTypes.Load<%= className %>;
+  constructor(public payload?: Entity[]) { }
 }
 
 export class <%= className %>LoadError implements Action {
- readonly type = <%= className %>ActionTypes.<%= className %>LoadError;
- constructor(public payload: any) { }
+  readonly type = <%= className %>ActionTypes.<%= className %>LoadError;
+  constructor(public payload: any) { }
 }
 
 export class <%= className %>Loaded implements Action {
- readonly type = <%= className %>ActionTypes.<%= className %>Loaded;
- constructor(public payload: Entity[]) { }
+  readonly type = <%= className %>ActionTypes.<%= className %>Loaded;
+  constructor(public payload: Entity[]) { }
 }
 
 export type <%= className %>Action = Load<%= className %> | <%= className %>Loaded | <%= className %>LoadError;

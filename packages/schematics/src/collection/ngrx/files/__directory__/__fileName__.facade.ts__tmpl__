@@ -17,5 +17,9 @@ export class <%= className %>Facade {
  
   loadAll() {
     this.store.dispatch(new Load<%= className %>());
-  }  
+  }
+
+  loadEntities(enitities: Entity[]) {
+    this.store.dispatch(new <%= className %>Loaded());
+  }
 }

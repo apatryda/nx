@@ -62,57 +62,67 @@ describe('<%= className %>Facade', () => {
       facade = TestBed.get(<%= className %>Facade);
     });
 
+    describe('all<%= className %>$', () => {
+      it('should return an empty list as initial value', async () => {
+        const list = await readFirst(facade.all<%= className %>$);
+
+        expect(list.length).toBe(0);
+      });
+    });
+
+    describe('loaded$', () => {
+      it('should return false as initial value', async () => {
+        const isLoaded = await readFirst(facade.loaded$);
+
+        expect(isLoaded).toBe(false);
+      });
+    });
+
     /**
      * The initially generated facade::loadAll() returns empty array
      */
-    it('loadAll() should return empty list with loaded == true', async (done) => {
-      try {
-        let list = await readFirst(facade.all<%= className %>$);
-        let isLoaded = await readFirst(facade.loaded$);
-
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
-
+    describe('loadAll()', () => {
+      beforeEach(() => {
         facade.loadAll();
+      });
 
-        list = await readFirst(facade.all<%= className %>$);
-        isLoaded = await readFirst(facade.loaded$);
+      it('should result in an empty list', async () => {
+        const list = await readFirst(facade.all<%= className %>$);
 
         expect(list.length).toBe(0);
-        expect(isLoaded).toBe(true);
+      });
 
-        done();
-      } catch (err) {
-        done.fail(err);
-      }
+      it('should result in loaded == true', async () => {
+        const isLoaded = await readFirst(facade.loaded$);
+
+        expect(isLoaded).toBe(true);
+      });
     });
 
     /**
      * Use `<%= className %>Loaded` to manually submit list for state management
      */
-    it('all<%= className %>$ should return the loaded list; and loaded flag == true', async (done) => {
-      try {
-        let list = await readFirst(facade.all<%= className %>$);
-        let isLoaded = await readFirst(facade.loaded$);
+    describe('dis', () => {
 
-        expect(list.length).toBe(0);
-        expect(isLoaded).toBe(false);
+    });
+    it('<%= className %>Loaded$ should return the loaded list; and loaded flag == true', async () => {
+    it('all<%= className %>$ should return the loaded list; and loaded flag == true', async () => {
+      let list = await readFirst(facade.all<%= className %>$);
+      let isLoaded = await readFirst(facade.loaded$);
 
-        store.dispatch(new <%= className %>Loaded([
-          create<%= className %>('AAA'),
-          create<%= className %>('BBB')
-        ]));
+      expect(list.length).toBe(0);
+      expect(isLoaded).toBe(false);
 
-        list = await readFirst(facade.all<%= className %>$);
-        isLoaded = await readFirst(facade.loaded$);
+      store.dispatch(new <%= className %>Loaded([
+        create<%= className %>('AAA'),
+        create<%= className %>('BBB')
+      ]));
 
-        expect(list.length).toBe(2);
-        expect(isLoaded).toBe(true);
+      list = await readFirst(facade.all<%= className %>$);
+      isLoaded = await readFirst(facade.loaded$);
 
-        done();
-      } catch (err) {
-        done.fail(err);
-      }
+      expect(list.length).toBe(2);
+      expect(isLoaded).toBe(true);
     });
   });
 

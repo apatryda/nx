@@ -7,19 +7,24 @@ import { Load<%= className %>, <%= className %>Loaded, <%= className %>LoadError
 
 @Injectable()
 export class <%= className %>Effects {
- @Effect() load<%= className %>$ = this.dataPersistence.fetch(<%= className %>ActionTypes.Load<%= className %>, {
-   run: (action: Load<%= className %>, state: <%= className %>PartialState) => {
-     // Your custom REST 'load' logic goes here. For now just return an empty list...
-     return new <%= className %>Loaded([]);
-   },
-
-   onError: (action: Load<%= className %>, error) => {
-     console.error('Error', error);
-     return new <%= className %>LoadError(error);
-   }
- });
-
- constructor(
-   private actions$: Actions,
-   private dataPersistence: DataPersistence<<%= className %>PartialState>) { }
+  @Effect() load<%= className %>$ = this.dataPersistence.fetch(<%= className %>ActionTypes.Load<%= className %>, {
+    run: ({ payload: entitiesToLoad }: Load<%= className %>, state: <%= className %>PartialState) => {
+      if (entitiesToLoad) {
+        return new <%= className %>Loaded(entitiesToLoad);
+      }
+ 
+      // Your custom REST 'load' logic goes here. For now just return an empty list...
+      return new <%= className %>Loaded([]);
+    },
+ 
+    onError: (action: Load<%= className %>, error) => {
+      console.error('Error', error);
+      return new <%= className %>LoadError(error);
+    }
+  });
+ 
+  constructor(
+    private actions$: Actions,
+    private dataPersistence: DataPersistence<<%= className %>PartialState>
+  ) { }
 }
